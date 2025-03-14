@@ -1,0 +1,26 @@
+document.getElementById("ageBypassForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    let cookie = document.getElementById("cookie").value;
+
+    fetch("/.netlify/functions/age_bypass", {
+        method: "POST",
+        body: new URLSearchParams({
+            cookie: cookie
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        let messageDiv = document.getElementById("responseMessage");
+        if (data.message) {
+            messageDiv.textContent = data.message;
+            messageDiv.className = "message success";
+        } else if (data.error) {
+            messageDiv.textContent = data.error;
+            messageDiv.className = "message error";
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
